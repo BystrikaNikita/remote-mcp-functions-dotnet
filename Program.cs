@@ -13,8 +13,7 @@ builder.ConfigureFunctionsWebApplication();
 if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING")))
 {
     builder.Services.AddOpenTelemetry()
-        .UseFunctionsWorkerDefaults()
-        .UseAzureMonitorExporter();
+        .UseFunctionsWorkerDefaults();
 }
 
 builder.Build().Run();
