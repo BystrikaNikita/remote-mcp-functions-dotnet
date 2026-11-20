@@ -4,22 +4,17 @@ using Microsoft.Extensions.Logging;
 
 namespace Howest.Function;
 
-public class HelloMCP
+public class HelloTool(ILogger<HelloTool> logger)
 {
-    private ILogger<HelloMCP> _logger;
-
-    public HelloMCP(ILogger<HelloMCP> logger)
+    [Function(nameof(SayHello))]
+    public string SayHello(
+        [McpToolTrigger("say_hello",
+            "Greets a person by name. Use this when the user asks you to greet or welcome someone.")]
+            ToolInvocationContext context,
+        [McpToolProperty("name", "The first name of the person to greet.", isRequired: true)]
+            string name)
     {
-        _logger = logger;
-    }
-
-    [Function(nameof(HelloMCP))]
-    public string Run(
-        [McpToolTrigger(nameof(HelloMCP), "Responds to the user with a hello message.")] ToolInvocationContext context,
-        [McpToolProperty(nameof(name), "The name of the person to greet.")] string? name
-    )
-    {
-        _logger.LogInformation("C# MCP tool trigger function processed a request.");
-        return $"Hello, {name ?? "world"}! This is an MCP Tool!";
+        logger.LogInformation("say_hello called with name {Name}", name);
+        return $"Hello {name}, greetings from Azure Functions!";
     }
 }
